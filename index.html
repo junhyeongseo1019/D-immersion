@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#3182F6" />
+  <meta name="description" content="University research-life companion — papers and lab meetings in one app." />
+  <title>D-immersion</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="assets/dalgu.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Status bar with D-immersion mark -->
+    <div class="status-bar">
+      <span id="status-time">9:41</span>
+      <div class="brand">
+        <img class="brand-logo" src="assets/logo-wordmark.png" alt="D-immersion" />
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- PAPERS TAB                                    -->
+    <!-- ============================================ -->
+    <div class="view active" id="view-papers">
+      <div class="app-header">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div class="eyebrow">PAPERS</div>
+            <h1>My Papers</h1>
+          </div>
+          <div class="header-mascot" id="papers-mascot" title="오늘도 논문 모험 ٩(◕‿◕)۶">📚</div>
+        </div>
+      </div>
+
+      <div class="subheader">
+        <input type="text" class="search-input" id="paper-search" placeholder="제목, 저자, 저널 검색..." />
+        <button class="sort-toggle" id="sort-toggle">
+          <span class="arrow" id="sort-arrow">▼</span>
+          <span id="sort-label">최신 저장순</span>
+        </button>
+      </div>
+
+      <div class="chips-row" id="project-chips">
+        <!-- generated dynamically -->
+      </div>
+
+      <div class="paper-list" id="paper-list">
+        <!-- generated dynamically -->
+      </div>
+
+      <button class="fab" id="add-paper-btn" title="논문 추가">+</button>
+    </div>
+
+    <!-- Paper detail (sub-view) -->
+    <div class="view" id="view-paper-detail">
+      <div class="app-header">
+        <button class="back-btn" id="paper-back-btn">← 논문 목록</button>
+        <h1 style="margin-top: 6px;">논문 상세</h1>
+      </div>
+      <div class="detail" id="paper-detail-body"></div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- LAB MEETINGS TAB                              -->
+    <!-- ============================================ -->
+    <div class="view" id="view-meetings">
+      <div class="app-header">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div class="eyebrow">LAB MEETING</div>
+            <h1>Weekly Sync</h1>
+          </div>
+          <img class="header-mascot header-mascot-img" id="meetings-mascot" src="assets/dalgu.png" alt="달구" title="오늘도 귀여운 달구" />
+        </div>
+      </div>
+
+      <div id="notif-area"></div>
+
+      <div class="schedule-row">
+        <span class="label">요일</span>
+        <select id="sched-day">
+          <option>Mon</option><option>Tue</option><option>Wed</option>
+          <option>Thu</option><option>Fri</option><option>Sat</option><option>Sun</option>
+        </select>
+        <span class="label">시간</span>
+        <input type="time" id="sched-time" value="10:00" style="background: transparent; border: none; font-size: 12px; font-weight: 600; color: var(--primary); outline: none; padding: 4px 0;" />
+        <div class="toggle on" id="sched-toggle" title="알림 ON/OFF"></div>
+      </div>
+
+      <div class="week-chips-row" id="lm-week-chips">
+        <!-- week chips generated dynamically -->
+      </div>
+
+      <div class="lm-list" id="lm-list">
+        <!-- generated dynamically -->
+      </div>
+    </div>
+
+    <!-- Lab meeting detail -->
+    <div class="view" id="view-meeting-detail">
+      <div class="app-header">
+        <button class="back-btn" id="lm-back-btn">← Lab Meeting 목록</button>
+        <div class="eyebrow" id="lm-detail-eyebrow" style="margin-top: 6px;"></div>
+        <h1 id="lm-detail-title">Lab Meeting</h1>
+      </div>
+      <div class="lm-detail" id="lm-detail-body"></div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- BOTTOM TAB BAR                                -->
+    <!-- ============================================ -->
+    <div class="tab-bar">
+      <div class="tab active" data-tab="papers" id="tab-papers">
+        <div class="icon">📄</div>
+        <div>논문</div>
+      </div>
+      <div class="tab" data-tab="meetings" id="tab-meetings">
+        <div class="icon">📋</div>
+        <div>랩미팅</div>
+      </div>
+    </div>
+
+    <!-- Hidden file input used for uploading meeting notes (Word/한글/txt/손글씨 이미지) -->
+    <input type="file" id="note-upload-input" multiple accept=".doc,.docx,.hwp,.hwpx,.txt,.pdf,.jpg,.jpeg,.png,.heic" style="display: none;" />
+
+    <!-- ============================================ -->
+    <!-- ADD PAPER MODAL                               -->
+    <!-- ============================================ -->
+    <div class="modal-back" id="add-paper-modal">
+      <div class="modal">
+        <h3>논문 추가</h3>
+        <label>제목</label>
+        <input type="text" id="ap-title" placeholder="예: High thermal conductivity EGaIn/PDMS composites" />
+        <label>저자</label>
+        <input type="text" id="ap-authors" placeholder="Park J., Kim S., Lee H." />
+        <label>저널 / 연도</label>
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="ap-journal" placeholder="Nature Materials" style="flex: 2;" />
+          <input type="number" id="ap-year" placeholder="2025" style="flex: 1;" />
+        </div>
+        <label>초록 (선택)</label>
+        <textarea id="ap-abstract" placeholder="AI 자동 분류에 활용됩니다..."></textarea>
+        <label>메모 (선택)</label>
+        <textarea id="ap-notes" placeholder="읽으며 떠오른 점..."></textarea>
+
+        <div class="ai-result" id="ap-ai-result" style="display: none;"></div>
+
+        <div class="actions">
+          <button class="btn btn-secondary" id="ap-cancel">취소</button>
+          <button class="btn btn-primary" id="ap-save">저장</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student detail (sheet modal) -->
+    <div class="modal-back" id="student-modal">
+      <div class="modal student-modal" id="student-modal-body"></div>
+    </div>
+  </div>
+
+  <script src="platform.js"></script>
+  <script src="storage-adapter.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

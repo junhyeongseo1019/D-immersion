@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "id": "d-immersion",
+  "name": "D-immersion",
+  "name_en": "D-immersion",
+  "version": "1.0.0",
+  "type": "static",
+  "entry": "index.html",
+  "permissions": {
+    "storage": true,
+    "identity": ["name"]
+  },
+  "visibility": "all"
+}
