@@ -137,7 +137,6 @@
     }
     container.innerHTML = list.map((p) => {
       const proj = projectById(p.projectId);
-      const readLabel = p.readStatus === "done" ? "읽음" : p.readStatus === "reading" ? "읽는중" : "안읽음";
       return `
         <article class="paper-card" data-id="${p.id}">
           <h3>${escapeHTML(p.title)}</h3>
@@ -155,14 +154,21 @@
               <button class="status-pill ${p.readStatus === "done"    ? "active" : ""}" data-status="done"    data-id="${p.id}">읽음</button>
             </div>
             <span class="time">${relTime(p.savedAt)}</span>
+            <button class="paper-delete-btn" data-delete="${p.id}" type="button" title="논문 삭제" aria-label="논문 삭제">🗑</button>
           </div>
         </article>`;
     }).join("");
 
     container.querySelectorAll(".paper-card").forEach((card) => {
       card.addEventListener("click", (e) => {
-        if (e.target.closest(".status-pill")) return;
+        if (e.target.closest(".status-pill") || e.target.closest(".paper-delete-btn")) return;
         openPaperDetail(card.dataset.id);
+      });
+    });
+    container.querySelectorAll(".paper-delete-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        confirmDeletePaper(btn.dataset.delete);
       });
     });
     container.querySelectorAll(".status-pill").forEach((btn) => {
@@ -214,6 +220,14 @@
         <span class="ai-meta">AI auto-classified</span>
       </div>
 
+      <div class="ai-comment-block">
+        <div class="ai-comment-head">
+          <span class="ai-comment-tag">AI 첨언</span>
+          <span class="ai-comment-project">${escapeHTML(proj ? proj.short : "?")}</span>
+        </div>
+        <div class="ai-comment-body">${escapeHTML((proj && proj.aiComment) || "이 프로젝트에 대한 AI 첨언이 아직 없어요.")}</div>
+      </div>
+
       <div class="section-title">Status</div>
       <select id="change-read-status" data-id="${p.id}">
         <option value="unread"  ${p.readStatus === "unread"  ? "selected" : ""}>안읽음</option>
@@ -230,6 +244,10 @@
       <div class="section-title">Saved</div>
       <div style="font-size: 12px; color: var(--secondary); font-style: italic;">
         ${fmtDate(p.savedAt)}  ·  modified ${relTime(p.updatedAt)}
+      </div>
+
+      <div class="actions" style="margin-top: 28px;">
+        <button class="btn btn-secondary" id="paper-delete-btn" type="button">이 논문 삭제</button>
       </div>
     `;
 
@@ -248,9 +266,51 @@
       renderPapers();
       openPaperDetail(p.id);
     });
+    const delBtn = $("#paper-delete-btn");
+    if (delBtn) delBtn.addEventListener("click", () => confirmDeletePaper(p.id));
     switchTab("paper-detail");
   }
   $("#paper-back-btn").addEventListener("click", () => switchTab("papers"));
+
+  // ----- Paper delete (with in-page confirm) ---------------------------
+  function confirmDeletePaper(id) {
+    const p = state.papers.find((x) => x.id === id);
+    if (!p) return;
+    const overlay = document.createElement("div");
+    overlay.className = "modal-back active";
+    overlay.innerHTML = (
+      '<div class="modal confirm-modal">' +
+      '<h3>논문을 삭제할까요?</h3>' +
+      '<p class="confirm-desc">' + escapeHTML(p.title) + '</p>' +
+      '<p class="confirm-sub">이 논문은 라이브러리에서 영구적으로 제거돼요. 되돌릴 수 없어요.</p>' +
+      '<div class="actions">' +
+      '<button class="btn btn-secondary" data-confirm-cancel type="button">취소</button>' +
+      '<button class="btn btn-primary confirm-delete-go" data-confirm-go type="button">삭제</button>' +
+      '</div>' +
+      '</div>'
+    );
+    document.body.appendChild(overlay);
+    function close() { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); }
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) close();
+    });
+    overlay.querySelector("[data-confirm-cancel]").addEventListener("click", close);
+    overlay.querySelector("[data-confirm-go]").addEventListener("click", () => {
+      deletePaper(id);
+      close();
+    });
+  }
+  function deletePaper(id) {
+    const p = state.papers.find((x) => x.id === id);
+    if (!p) return;
+    const wasInDetail = state.activeTab === "paper-detail";
+    state.papers = state.papers.filter((x) => x.id !== id);
+    saveState();
+    renderPapers();
+    renderProjectChips();
+    pushNotification("논문이 삭제됐어요: " + p.title.slice(0, 30) + (p.title.length > 30 ? "…" : ""));
+    if (wasInDetail) switchTab("papers");
+  }
 
   // ----- Add paper modal ------------------------------------------------
   function openAddPaper() {
@@ -348,17 +408,12 @@
   function renderSchedule() {
     $("#sched-day").value = state.schedule.day;
     $("#sched-time").value = state.schedule.time;
-    $("#sched-toggle").classList.toggle("on", state.schedule.enabled);
   }
   $("#sched-day").addEventListener("change", (e) => {
     state.schedule.day = e.target.value; saveState(); renderMeetings();
   });
   $("#sched-time").addEventListener("change", (e) => {
     state.schedule.time = e.target.value; saveState(); renderMeetings();
-  });
-  $("#sched-toggle").addEventListener("click", () => {
-    state.schedule.enabled = !state.schedule.enabled;
-    saveState(); renderSchedule();
   });
 
   // ----- Lab meetings ---------------------------------------------------
@@ -812,7 +867,6 @@
   }
 
   function checkScheduleNotification() {
-    if (!state.schedule.enabled) return;
     const now = new Date();
     const dayMap = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     if (dayMap[now.getDay()] !== state.schedule.day) return;

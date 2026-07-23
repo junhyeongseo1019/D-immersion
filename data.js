@@ -26,7 +26,8 @@ D.projects = [
     short: "EGaIn/PDMS",
     description: "EGaIn과 PDMS 복합체의 열전도 특성 및 계면 제어 연구",
     color: "#780000",
-    keywords: ["egain", "pdms", "thermal", "conduction", "composite", "열전도", "복합체", "galinstan", "liquid metal", "thermal conductivity"]
+    keywords: ["egain", "pdms", "thermal", "conduction", "composite", "열전도", "복합체", "galinstan", "liquid metal", "thermal conductivity"],
+    aiComment: "EGaIn·PDMS 계열은 0.5 wt% 부근의 percolation threshold가 핵심 변수예요. wt% 늘릴 때 0.7 이상부터는 curing 불량이 거의 항상 따라오니, mixing protocol(sonication 시간·분산제) 먼저 잡고 결과를 보는 순서로 가져가면 좋겠어요."
   },
   {
     id: "p_wearable_cool",
@@ -34,7 +35,8 @@ D.projects = [
     short: "Wearable Cooling",
     description: "웨어러블 디바이스용 액체금속 기반 마이크로 채널 냉각 시스템",
     color: "#003049",
-    keywords: ["wearable", "cooling", "microchannel", "액체금속", "냉각", "wearable device", "heat dissipation", "thermal management"]
+    keywords: ["wearable", "cooling", "microchannel", "액체금속", "냉각", "wearable device", "heat dissipation", "thermal management"],
+    aiComment: "웨어러블 냉각은 microchannel 형상(폭·manifold 대칭)이 thermal resistance와 pressure drop을 동시에 결정해요. baseline부터 확정하고 optimization은 그 다음 — Week 6 이후에 manifold·채널 폭 sweep 들어가시는 걸 추천."
   },
   {
     id: "p_4d_meta",
@@ -42,7 +44,8 @@ D.projects = [
     short: "4D Printing",
     description: "온도 자극에 의해 형상이 변하는 4D 프린팅 열메타물질 설계",
     color: "#2a9d8f",
-    keywords: ["4d", "printing", "metamaterial", "4d printing", "shape memory", "열메타물질", "4d 프린팅", "stimuli", "responsive"]
+    keywords: ["4d", "printing", "metamaterial", "4d printing", "shape memory", "열메타물질", "4d 프린팅", "stimuli", "responsive"],
+    aiComment: "4D 프린팅은 거시 recovery (%)만 보면 95% 넘기 쉽고, 실제 micro-scale damage는 SEM으로 확인해야 보여요. cyclic test는 최소 100회, 가능하면 1000회까지 — 그래야 reliability 주장의 근거가 됩니다."
   }
 ];
 

@@ -188,6 +188,22 @@ body {
   background: var(--accent); color: #FFFFFF;
 }
 .paper-card .footer .time { font-size: 11px; color: var(--muted); font-weight: 500; }
+.paper-card .footer .paper-delete-btn {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: transparent; border: 1px solid var(--line);
+  color: var(--muted); border-radius: 8px;
+  font-size: 14px; line-height: 1; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-left: 6px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  font-family: inherit;
+  padding: 0;
+}
+.paper-card .footer .paper-delete-btn:hover {
+  background: var(--danger); color: #FFFFFF; border-color: var(--danger);
+}
+.paper-card .footer .paper-delete-btn:active { transform: scale(0.94); }
 
 /* ---- Empty state ---- */
 .empty { text-align: center; padding: 60px 20px; color: var(--secondary); }
@@ -281,6 +297,46 @@ body {
 }
 .detail .change-project select { font-size: 13px; padding: 6px 10px; }
 .detail .ai-meta { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 0.3px; }
+
+/* ---- AI comment block (paper detail) ---- */
+.ai-comment-block {
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, var(--accent-bg) 0%, #F4F8FF 100%);
+  border: 1px solid var(--accent-line);
+  border-left: 4px solid var(--accent);
+  border-radius: 12px;
+}
+.ai-comment-head {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+}
+.ai-comment-tag {
+  font-size: 10px; font-weight: 800; color: #FFFFFF;
+  background: var(--accent);
+  padding: 3px 8px; border-radius: 6px;
+  letter-spacing: 0.4px;
+}
+.ai-comment-project {
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  letter-spacing: -0.1px;
+}
+.ai-comment-body {
+  font-size: 13px; line-height: 1.65; color: var(--primary);
+  white-space: pre-wrap;
+}
+
+/* ---- Confirm modal (paper delete) ---- */
+.confirm-modal h3 { color: var(--primary); }
+.confirm-modal .confirm-desc {
+  font-size: 14px; font-weight: 700; color: var(--primary);
+  background: var(--bg-2); padding: 12px 14px; border-radius: 10px;
+  margin: 0 0 10px; line-height: 1.5; word-break: break-word;
+}
+.confirm-modal .confirm-sub {
+  font-size: 12px; color: var(--secondary); margin: 0 0 8px; line-height: 1.55;
+}
+.confirm-modal .btn-primary { background: var(--danger); }
+.confirm-modal .btn-primary:hover { background: #D9323F; }
 
 /* ---- Add paper modal ---- */
 .modal-back {
@@ -641,18 +697,6 @@ body {
   font-size: 13px; font-weight: 600; cursor: pointer; outline: none;
   font-family: inherit; padding: 6px 10px; border-radius: 8px;
 }
-.schedule-row .toggle {
-  margin-left: auto; position: relative; width: 36px; height: 20px;
-  background: var(--line-strong); border-radius: 999px; cursor: pointer;
-  transition: background 0.2s;
-}
-.schedule-row .toggle.on { background: var(--accent); }
-.schedule-row .toggle::after {
-  content: ""; position: absolute; top: 2px; left: 2px;
-  width: 16px; height: 16px; background: #FFFFFF; border-radius: 50%;
-  transition: left 0.2s;
-}
-.schedule-row .toggle.on::after { left: 18px; }
 
 /* ---- Student detail modal (sheet) ---- */
 .student-modal {
