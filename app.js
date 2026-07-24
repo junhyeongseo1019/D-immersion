@@ -755,11 +755,10 @@
 
     body.innerHTML = `
       <div class="sm-hero">
-        <div class="sm-avatar" style="background: ${mem.color};">${escapeHTML(mem.character || "🐕")}</div>
+        <div class="sm-avatar" style="background: ${mem.color};">${escapeHTML(initials(displayName(mem)))}</div>
         <div class="sm-info">
           <div class="sm-name">${escapeHTML(mem.name)}</div>
           <div class="sm-role">${escapeHTML(mem.roleLabel)}${mem.alias ? " · " + escapeHTML(mem.alias) : ""}</div>
-          <div class="sm-char-label">${escapeHTML(mem.characterLabel || "")}</div>
         </div>
       </div>
 

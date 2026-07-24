@@ -6,14 +6,13 @@ const D = {};
 // --- Team members -----------------------------------------------------
 // 호동해 (supervisor), 서준형 (석사), 박인자 (석박통합),
 // 유지현 (석박통합), 이지현 (학부), Negassi (박사)
-// character: '감정 키워드 + 시바 캐릭터 모티프' — 작은 emoji sticker로 활용
 D.team = [
-  { id: "hodonghae",     name: "호동해",  alias: null,         role: "professor",  roleLabel: "Supervisor",  color: "#780000", character: "👨‍🚀", characterLabel: "우주비행사 시바" },
-  { id: "seojunhyeong",  name: "서준형",  alias: "학생 1",    role: "ms",         roleLabel: "석사과정",   color: "#003049", character: "📚", characterLabel: "책가방 시바" },
-  { id: "parkinja",      name: "박인자",  alias: "학생 2",    role: "integrated", roleLabel: "석박통합",   color: "#2a9d8f", character: "🦦", characterLabel: "분석 시바" },
-  { id: "yujihyeon",     name: "유지현",  alias: "학생 3",    role: "integrated", roleLabel: "석박통합",   color: "#e76f51", character: "🎉", characterLabel: "축하 시바" },
-  { id: "leejihyeon",    name: "이지현",  alias: "학생 4",    role: "undergrad",  roleLabel: "학부연구생", color: "#9a8c98", character: "🐣", characterLabel: "응원 시바" },
-  { id: "negassi",       name: "Negassi", alias: "학생 5",   role: "phd",        roleLabel: "박사",       color: "#0077b6", character: "💪", characterLabel: "근력 시바" }
+  { id: "hodonghae",     name: "호동해",  alias: null,         role: "professor",  roleLabel: "Supervisor",  color: "#780000" },
+  { id: "seojunhyeong",  name: "서준형",  alias: "학생 1",    role: "ms",         roleLabel: "석사과정",   color: "#003049" },
+  { id: "parkinja",      name: "박인자",  alias: "학생 2",    role: "integrated", roleLabel: "석박통합",   color: "#2a9d8f" },
+  { id: "yujihyeon",     name: "유지현",  alias: "학생 3",    role: "integrated", roleLabel: "석박통합",   color: "#e76f51" },
+  { id: "leejihyeon",    name: "이지현",  alias: "학생 4",    role: "undergrad",  roleLabel: "학부연구생", color: "#9a8c98" },
+  { id: "negassi",       name: "Negassi", alias: "학생 5",   role: "phd",        roleLabel: "박사",       color: "#0077b6" }
 ];
 
 const teamById = (id) => D.team.find((m) => m.id === id);
